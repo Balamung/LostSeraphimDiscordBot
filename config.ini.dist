@@ -1,0 +1,8 @@
+[SETTINGS]
+token = DISCORD_BOT_TOKEN
+
+[SERAPHICBOUNTY]
+bountyChannel = CHANNEL_ID
+moneyGiverId = OFFICER_ID
+min=1
+max=500
