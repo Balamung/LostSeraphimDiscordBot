@@ -48,23 +48,29 @@ class MyClient(discord.Client):
     async def process_bounty(self):
         winningNumber = random.randint(int(bountySettings['min']), int(bountySettings['max']))
         winningUser = False
+        #Check all entries for a winner
         for userId in giveaway_data["currentGiveaway"]["entries"]:
             if winningNumber in giveaway_data["currentGiveaway"]["entries"][userId]:
                 winningUser = self.get_user(int(userId))
         
+        #Archive the current drawing
         ts = time.gmtime()
         giveaway_data["archive"][time.strftime("%Y%m%d", ts)] = giveaway_data["currentGiveaway"].copy()
         giveaway_data["archive"][time.strftime("%Y%m%d", ts)]["winningNumber"] = winningNumber
         giveaway_data["currentGiveaway"]["entries"] = {}
 
+        #Figure out the next draw datetime
         today = datetime.datetime.now()
         rd = relativedelta(days=1, weekday=calendar.TUESDAY)
         giveaway_day = today + rd
-        giveaway_day = giveaway_day.replace(hour=12, minute=0, second=0)
+        giveaway_day = giveaway_day.replace(hour=21, minute=0, second=0)
         giveaway_data["currentGiveaway"]["endTime"] = int(giveaway_day.timestamp())
         await self.write_giveaway_data()
+
+        #Purge channel of non-pinned messages
         await self.get_channel(bountyChannelId).purge(limit=None, check=message_is_not_pinned, bulk=False)
 
+        #Announce the results
         embedMessage = discord.Embed(title="Giveaway for {0}".format(time.strftime("%B %d", ts)), color=0x00ff00)
         embedMessage.add_field(name="Winning number", value=winningNumber, inline=False)
 
