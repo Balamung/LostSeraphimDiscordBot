@@ -32,7 +32,7 @@ class MyClient(discord.Client):
     async def giveaway_background_task(self):
         await self.wait_until_ready()
         while not self.is_closed():
-            await asyncio.sleep(5)
+            await asyncio.sleep(60)
             
             if(await self.is_bounty_over()):
                 await self.process_bounty()
