@@ -1,6 +1,6 @@
 # Lost Seraphim Discord Bot
 
-This is an internal bot I'm making for fun
+This is an internal bot I'm making for fun. Please be nice, it's my first time using Python.
 
 ## Installation
 
