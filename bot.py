@@ -61,6 +61,7 @@ class MyClient(discord.Client):
         today = datetime.datetime.now()
         rd = relativedelta(days=1, weekday=calendar.TUESDAY)
         giveaway_day = today + rd
+        giveaway_day = giveaway_day.replace(hour=12, minute=0, second=0)
         giveaway_data["currentGiveaway"]["endTime"] = int(giveaway_day.timestamp())
         await self.write_giveaway_data()
         await self.get_channel(bountyChannelId).purge(limit=None, check=message_is_not_pinned, bulk=False)
@@ -71,11 +72,11 @@ class MyClient(discord.Client):
         if winningUser != False:
             embedMessage.add_field(name="Winner", value='<@'+str(winningUser.id)+'>', inline=False)
             embedMessage.add_field(name="Winner's guesses", value=giveaway_data["archive"][time.strftime("%Y%m%d", ts)]["entries"][str(winningUser.id)], inline=False)
+            await self.get_channel(bountyChannelId).send('Congratulations <@{0}>! <@{1}> remember to give them their prize!'.format(winningUser.id, bountySettings["moneyGiverId"]))
         else:
-            embedMessage.add_field(name="Winner", value="Nobody ...", inline=False)
+            embedMessage.add_field(name="Winner", value="Nobody, better luck next week!", inline=False)
 
         await self.get_channel(bountyChannelId).send(embed=embedMessage)
-        await self.get_channel(bountyChannelId).send('Congratulations <@{0}>! <@{1}> remember to give them their prize!'.format(winningUser.id, bountySettings["moneyGiverId"]))
 
     async def on_message(self, message):
         if message.channel.id != bountyChannelId :
