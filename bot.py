@@ -2,10 +2,9 @@ import discord
 import configparser
 import asyncio
 import json
-from pprint import pprint
 import time
 import datetime
-from dateutil.relativedelta import *
+from dateutil.relativedelta import relativedelta
 import calendar
 import random
 
@@ -96,17 +95,20 @@ class MyClient(discord.Client):
             #If the user has already entered this number
             if entry in giveaway_data["currentGiveaway"]["entries"][userId]:
                 await message.add_reaction('\U0000274E')
+                await message.channel.send("You have already chosen this number.")
                 return
             
             #Incorrect values
             if entry < int(bountySettings['min']) or entry > int(bountySettings['max']):
                 await message.add_reaction('\U0000274E')
+                await message.channel.send("The numbers must be between {0} and {1}.".format(bountySettings['min'], bountySettings['max']))
                 return
             
             #Value already picked
             for userId in giveaway_data["currentGiveaway"]["entries"]:
                 if entry in giveaway_data["currentGiveaway"]["entries"][userId]:
                     await message.add_reaction('\U0000274E')
+                    await message.channel.send("Someone else has already chosen this number.")
                     return
 
             giveaway_data["currentGiveaway"]["entries"][userId].append(entry)
