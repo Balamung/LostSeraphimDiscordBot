@@ -63,7 +63,7 @@ class MyClient(discord.Client):
         today = datetime.datetime.now()
         rd = relativedelta(days=1, weekday=calendar.TUESDAY)
         giveaway_day = today + rd
-        giveaway_day = giveaway_day.replace(hour=21, minute=0, second=0)
+        giveaway_day = giveaway_day.replace(hour=22, minute=0, second=0)
         giveaway_data["currentGiveaway"]["endTime"] = int(giveaway_day.timestamp())
         await self.write_giveaway_data()
 
