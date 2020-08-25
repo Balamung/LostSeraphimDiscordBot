@@ -111,8 +111,8 @@ class MyClient(discord.Client):
                 return
             
             #Value already picked
-            for userId in giveaway_data["currentGiveaway"]["entries"]:
-                if entry in giveaway_data["currentGiveaway"]["entries"][userId]:
+            for checkingUserId in giveaway_data["currentGiveaway"]["entries"]:
+                if entry in giveaway_data["currentGiveaway"]["entries"][checkingUserId]:
                     await message.add_reaction('\U0000274E')
                     await message.channel.send("Someone else has already chosen this number.")
                     return
